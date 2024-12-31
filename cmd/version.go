@@ -24,7 +24,7 @@ import (
 
 func init() {
 	// RootCmd.SetVersionTemplate(version())
-	RootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(versionCmd)
 }
 
 var versionCmd = &cobra.Command{
@@ -38,5 +38,5 @@ var versionCmd = &cobra.Command{
 }
 
 func longVersion() string {
-	return fmt.Sprintf("SMOOT v%s - Donovan C. Young\n\n%s", RootCmd.Version, RootCmd.Short)
+	return fmt.Sprintf("SMOOT v%s - Donovan C. Young\n\n%s", rootCmd.Version, rootCmd.Short)
 }

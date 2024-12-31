@@ -27,10 +27,10 @@ import (
 var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
-var RootCmd = &cobra.Command{
+var rootCmd = &cobra.Command{
 	Use:     "smoot",
 	Version: "0.1.0",
-	Short:   "Seven (7) days to die Mod Order Optimizing Tool",
+	Short:   "Seven (7) days to die Mod Order Optimization Tool",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		verbosity, _ := cmd.Flags().GetCount("verbose")
 		viper.Set("verbosity", verbosity)
@@ -40,8 +40,8 @@ var RootCmd = &cobra.Command{
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	RootCmd.SetVersionTemplate(version())
-	err := RootCmd.Execute()
+	rootCmd.SetVersionTemplate(version())
+	err := rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)
 	}
@@ -50,11 +50,11 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.smoot.yaml)")
-	RootCmd.PersistentFlags().CountP("verbose", "v", "verbose output (may be repeated)")
-	RootCmd.PersistentFlags().StringP("modlist", "m", "STDIN", "The modlist file to read for load order")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.smoot.yaml)")
+	rootCmd.PersistentFlags().CountP("verbose", "v", "verbose output (may be repeated)")
+	rootCmd.PersistentFlags().StringP("modlist", "m", "STDIN", "The modlist file to read for load order")
 
-	err := viper.BindPFlag("modlist", RootCmd.PersistentFlags().Lookup("modlist"))
+	err := viper.BindPFlag("modlist", rootCmd.PersistentFlags().Lookup("modlist"))
 	if err != nil {
 		panic(err)
 	}
@@ -85,5 +85,5 @@ func initConfig() {
 }
 
 func version() string {
-	return fmt.Sprintln(RootCmd.Version)
+	return fmt.Sprintln(rootCmd.Version)
 }
