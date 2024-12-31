@@ -3,7 +3,7 @@ module github.com/donovanmods/smoot
 go 1.23.4
 
 require (
-	github.com/donovanmods/7dtd-modtools v0.1.0
+	github.com/donovanmods/7dtd-modtools v0.1.1
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
 )
