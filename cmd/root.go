@@ -52,6 +52,9 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.smoot.yaml)")
 	rootCmd.PersistentFlags().CountP("verbose", "v", "verbose output (may be repeated)")
+	rootCmd.PersistentFlags().Bool("dryrun", false, "run without performing any persistent operations")
+
+	_ = viper.BindPFlag("dryrun", rootCmd.PersistentFlags().Lookup("dryrun"))
 }
 
 // initConfig reads in config file and ENV variables if set.
