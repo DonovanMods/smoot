@@ -52,12 +52,6 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.smoot.yaml)")
 	rootCmd.PersistentFlags().CountP("verbose", "v", "verbose output (may be repeated)")
-	rootCmd.PersistentFlags().StringP("modlist", "m", "STDIN", "The modlist file to read for load order")
-
-	err := viper.BindPFlag("modlist", rootCmd.PersistentFlags().Lookup("modlist"))
-	if err != nil {
-		panic(err)
-	}
 }
 
 // initConfig reads in config file and ENV variables if set.
