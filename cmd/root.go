@@ -30,7 +30,7 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:     "smoot",
-	Version: "0.1.0",
+	Version: "0.1.2",
 	Short:   "Seven (7) days to die Mod Order Optimization Tool",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		verbosity, _ := cmd.Flags().GetCount("verbose")

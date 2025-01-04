@@ -75,7 +75,7 @@ func readTEXT(path string) (*ModListing, error) {
 		line := fileScanner.Text()
 
 		// Skip comments and unchecked mods
-		if line[0] != '+' {
+		if line[0] == '#' {
 			continue
 		}
 
@@ -85,7 +85,7 @@ func readTEXT(path string) (*ModListing, error) {
 		}
 
 		// Skip the 7dtd MO2 plugin
-		if strings.Contains(line, "7D2D MO2 Plugin") {
+		if strings.Contains(line, "7 Days Plugin") {
 			continue
 		}
 

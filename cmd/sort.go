@@ -56,7 +56,7 @@ func runSort(cmd *cobra.Command, args []string) {
 	}
 
 	if verbosity > 0 {
-		fmt.Printf("Reading modinfo files in %s...\n", blue(directory))
+		fmt.Printf("Reading modinfo files in %s ...\n", blue(directory))
 	}
 
 	modInfos, err := modinfo.ParseDir(modinfo.ParseOpts{Directory: directory, Verbosity: verbosity})
@@ -69,7 +69,7 @@ func runSort(cmd *cobra.Command, args []string) {
 	}
 
 	if verbosity > 0 {
-		fmt.Printf("Parsing modorder file %s...\n", blue(modorder))
+		fmt.Printf("Parsing modorder file %s ...\n", blue(modorder))
 	}
 
 	modListing, err := modlist.Read(modorder)
@@ -78,7 +78,7 @@ func runSort(cmd *cobra.Command, args []string) {
 	}
 
 	if verbosity > 0 {
-		fmt.Println(green("Sorting mods..."))
+		fmt.Println("Sorting mods ...")
 	}
 	for _, mod := range *modListing {
 		modInfo, found := findByMO2Name(modInfos, mod.Name)
@@ -104,6 +104,10 @@ func runSort(cmd *cobra.Command, args []string) {
 				log.Printf("%s: %v\n", red("ERROR Error moving %s to %s", modInfo.Path(), newFilename), err)
 			}
 		}
+	}
+
+	if verbosity > 0 {
+		fmt.Println(green("Completed Successfully"))
 	}
 }
 
