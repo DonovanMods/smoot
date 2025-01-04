@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -33,7 +34,13 @@ var rootCmd = &cobra.Command{
 	Short:   "Seven (7) days to die Mod Order Optimization Tool",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		verbosity, _ := cmd.Flags().GetCount("verbose")
+		noColor, _ := cmd.Flags().GetBool("no-color")
+
 		viper.Set("verbosity", verbosity)
+
+		if noColor {
+			color.NoColor = true
+		}
 	},
 }
 
@@ -53,6 +60,8 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.smoot.yaml)")
 	rootCmd.PersistentFlags().CountP("verbose", "v", "verbose output (may be repeated)")
 	rootCmd.PersistentFlags().Bool("dryrun", false, "run without performing any persistent operations")
+	rootCmd.PersistentFlags().Bool("color", true, "colorize output")
+	rootCmd.PersistentFlags().Bool("no-color", false, "disable color output")
 
 	_ = viper.BindPFlag("dryrun", rootCmd.PersistentFlags().Lookup("dryrun"))
 }

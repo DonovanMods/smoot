@@ -38,7 +38,7 @@ upgrade: tidy
 ## Build sub-commands
 
 build-win:
-	GOOS=windows GOARCH=amd64 go build -o "bin/$(basename ${PWD}).exe" ./main.go
+	GOOS=windows GOARCH=amd64 go build -o "bin/$(shell basename ${PWD}).exe" ./main.go
 
 ## Git Hooks
 pre-commit: clean check test

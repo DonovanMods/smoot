@@ -25,6 +25,7 @@ import (
 
 	"github.com/donovanmods/7dtd-modtools/lib/modinfo"
 	"github.com/donovanmods/smoot/lib/modlist"
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -41,62 +42,66 @@ func runSort(cmd *cobra.Command, args []string) {
 	var dryrun = viper.GetBool("dryrun")
 	var directory = cmd.Flag("dir").Value.String()
 	var modorder = cmd.Flag("modorder").Value.String()
+	var blue = color.New(color.FgBlue).SprintFunc()
+	var red = color.New(color.FgRed).SprintFunc()
+	var green = color.New(color.FgGreen).SprintFunc()
+	var yellow = color.New(color.FgYellow).SprintFunc()
 
 	if _, err := os.Stat(directory); os.IsNotExist(err) {
 		log.Fatal("FATAL Directory ", directory, "does not exist")
 	}
 
 	if _, err := os.Stat(modorder); os.IsNotExist(err) {
-		log.Fatal("FATAL Modorder file ", modorder, "does not exist")
+		log.Fatal(red("FATAL Modorder file ", modorder, "does not exist"))
 	}
 
 	if verbosity > 0 {
-		log.Printf("INFO Reading modinfo files in %q...\n", directory)
+		fmt.Printf("Reading modinfo files in %s...\n", blue(directory))
 	}
 
 	modInfos, err := modinfo.ParseDir(modinfo.ParseOpts{Directory: directory, Verbosity: verbosity})
 	if err != nil {
-		log.Fatal("FATAL Error while reading modinfo files from", directory, ":", err)
+		log.Fatal(red("FATAL Error while reading modinfo files from", directory, ":", err))
 	}
 
 	if len(*modInfos) == 0 {
-		log.Fatal("FATAL No modinfo.xml files found in", directory)
+		log.Fatal(red("FATAL No modinfo.xml files found in", directory))
 	}
 
 	if verbosity > 0 {
-		log.Printf("INFO Parsing modorder file %q...\n", modorder)
+		fmt.Printf("Parsing modorder file %s...\n", blue(modorder))
 	}
 
 	modListing, err := modlist.Read(modorder)
 	if err != nil {
-		log.Fatal("FATAL Error while reading modorder file", modorder, ":", err)
+		log.Fatal(red("FATAL Error while reading modorder file", modorder, ":", err))
 	}
 
 	if verbosity > 0 {
-		log.Println("INFO Sorting mods...")
+		fmt.Println(green("Sorting mods..."))
 	}
 	for _, mod := range *modListing {
 		modInfo, found := findByMO2Name(modInfos, mod.Name)
 
 		if verbosity > 2 && found {
-			log.Printf("INFO Found mod %q with priority %-0.4d\n", mod.Name, mod.Priority)
+			fmt.Printf("Found mod %s with priority %s\n", blue(mod.Name), blue("%-0.4d", mod.Priority))
 		}
 
 		if !found {
-			log.Printf("WARNING Did NOT find Mod %q... skipped\n", mod.Name)
+			log.Printf("%s %s%s\n", yellow("WARNING Did NOT find Mod"), blue(mod.Name), yellow("... skipped"))
 			continue
 		}
 
 		newFilename := filepath.Join(modInfo.Dir(), generateNewFilename(modInfo, mod.Priority))
 
 		if verbosity > 1 {
-			fmt.Printf("INFO Renaming %q from %q to %q\n", mod.Name, modInfo.Filename(), filepath.Base(newFilename))
+			fmt.Printf("Renaming %s from %s to %s\n", green(mod.Name), blue(modInfo.Filename()), blue(filepath.Base(newFilename)))
 		}
 
 		if !dryrun {
 			err := os.Rename(modInfo.Path(), newFilename)
 			if err != nil {
-				log.Printf("ERROR Error moving %q to %q: %v\n", modInfo.Path(), newFilename, err)
+				log.Printf("%s: %v\n", red("ERROR Error moving %s to %s", modInfo.Path(), newFilename), err)
 			}
 		}
 	}
